@@ -9,13 +9,13 @@
   <meta name="description" content="">
   <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
   <meta name="generator" content="Hugo 0.118.2">
-  <title>Carousel Template · Bootstrap v5.3</title>
+  <link rel="icon" href="img/icon.png">
+  <title>Lava-rapido</title>
 
   <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/carousel/">
 
 
 
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3">
   <link rel="stylesheet" href="style.css">
 
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -110,16 +110,15 @@
       <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="0" class="active" aria-current="true"
         aria-label="Slide 1"></button>
       <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
-      <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
     </div>
     <div class="carousel-inner">
       <div class="carousel-item active">
         <img src="img/wallpaper5.jpg" alt="" width="100%" height="100%" style="filter: blur(2px) brightness(50%);">
         <div class="container">
           <div class="carousel-caption text-start">
-            <h1>Example headline.</h1>
-            <p class="opacity-75">Some representative placeholder content for the first slide of the carousel.</p>
-            <p><a class="btn btn-lg btn-primary" href="authentification/authentification.php">Sign up today</a></p>
+            <h1>O melhor lava-rapido da região!</h1>
+            <p class="opacity-75">Não perca tempo, cadastre-se agora e proporcione ao seu carro uma transformação <br> de excelência que o deixará deslumbrante. Venha descobrir a impecabilidade que merece!</p>
+            <p><a class="btn btn-lg btn-secondary" href="authentification/authentification.php">Cadastre-se hoje</a></p>
           </div>
         </div>
       </div>
@@ -127,19 +126,9 @@
         <img src="img/wallpaper6.jpg" alt="" width="100%" height="100%" style="filter: blur(3px) brightness(50%);">
         <div class="container">
           <div class="carousel-caption">
-            <h1>Another example headline.</h1>
-            <p>Some representative placeholder content for the second slide of the carousel.</p>
-            <p><a class="btn btn-lg btn-primary" href="#">Learn more</a></p>
-          </div>
-        </div>
-      </div>
-      <div class="carousel-item">
-        <img src="img/wallpaper7.jpg" alt="" width="100%" style="filter: blur(3px) brightness(50%);">
-        <div class="container">
-          <div class="carousel-caption text-end">
-            <h1>One more for good measure.</h1>
-            <p>Some representative placeholder content for the third slide of this carousel.</p>
-            <p><a class="btn btn-lg btn-primary" href="#">Browse gallery</a></p>
+            <h1>Olá Pablo Cauê</h1>
+            <p>Seu carro precisa de uma tratada? agende uma visita hoje mesmo!</p>
+            <p><a class="btn btn-lg btn-secondary" href="#">Agendar</a></p>
           </div>
         </div>
       </div>
@@ -167,49 +156,48 @@
         <svg class="bd-placeholder-img rounded-circle" width="140" height="140" xmlns="http://www.w3.org/2000/svg"
           role="img" aria-label="Placeholder" preserveAspectRatio="xMidYMid slice" focusable="false">
           <title>Placeholder</title>
-          <rect width="100%" height="100%" fill="var(--bs-secondary-color)" />
+          <rect width="100%" height="100%" fill="var(--bs-secondary-bg)" />
           <image href="img/wallpaper8-removebg-preview.png" x="0" y="0" width="140" height="140" />
         </svg>
         <h2 class="fw-normal">Produtos selecionados</h2>
         <p>Aqui você encontrará uma seleção exclusiva dos melhores produtos do mercado para deixar o seu carro
           impecável.</p>
-        <p><a class="btn btn-secondary" href="#">View details &raquo;</a></p>
+        <p><a class="btn btn-secondary" href="#products">Saiba mais &raquo;</a></p>
       </div><!-- /.col-lg-4 -->
       <div class="col-lg-4">
         <svg class="bd-placeholder-img rounded-circle" width="140" height="140" xmlns="http://www.w3.org/2000/svg"
           role="img" aria-label="Placeholder" preserveAspectRatio="xMidYMid slice" focusable="false">
           <title>Placeholder</title>
-          <rect width="100%" height="100%" fill="var(--bs-secondary-color)" />
+          <rect width="100%" height="100%" fill="var(--bs-secondary-bg)" />
           <image href="img/bola2.png" x="-25" y="-30" width="170" height="200" />
         </svg>
         <h2 class="fw-normal">Garantia de qualidade</h2>
         <p>Excelência Garantida: Compromisso com a Qualidade. Nossa busca incessante pela perfeição. Satisfação do
           cliente, nossa missão.</p>
-        <p><a class="btn btn-secondary" href="#">View details &raquo;</a></p>
+        <p><a class="btn btn-secondary" href="#quality">Saiba mais &raquo;</a></p>
       </div><!-- /.col-lg-4 -->
       <div class="col-lg-4">
         <svg class="bd-placeholder-img rounded-circle" width="140" height="140" xmlns="http://www.w3.org/2000/svg"
           role="img" aria-label="Placeholder" preserveAspectRatio="xMidYMid slice" focusable="false">
           <title>Placeholder</title>
-          <rect width="100%" height="100%" fill="var(--bs-secondary-color)" />
+          <rect width="100%" height="100%" fill="var(--bs-secondary-bg)" />
           <image href="img/bola3.png" x="0" y="0" width="140" height="140" />
         </svg>
         <h2 class="fw-normal">Melhor preço da região</h2>
         <p>Economia Garantida para seu Bolso. Qualidade e Custos Imbatíveis, Somos a Sua Escolha. Não perca as Ofertas
           Incríveis que Temos a Oferecer!</p>
-        <p><a class="btn btn-secondary" href="#">View details &raquo;</a></p>
+        <p><a class="btn btn-secondary" href="#price">Saiba mais &raquo;</a></p>
       </div><!-- /.col-lg-4 -->
     </div><!-- /.row -->
 
     <!-- START THE FEATURETTES -->
-
+    <div id="products"></div>
     <hr class="featurette-divider">
 
     <div class="row featurette">
       <div class="col-md-7">
-        <h2 class="featurette-heading fw-normal lh-1">First featurette heading. <span class="text-body-secondary">It’ll
-            blow your mind.</span></h2>
-        <p class="lead">Some great placeholder content for the first featurette here. Imagine some exciting prose here.
+        <h2 class="featurette-heading fw-normal lh-1">Os melhores produtos você acha aqui. <span class="text-body-secondary">O melhor para seu carro</span></h2>
+        <p class="lead">Explore o nosso irresistível catálogo de produtos e descubra a escolha perfeita para satisfazer todas as suas necessidades. Cada item é minuciosamente selecionado por nossos especialistas, garantindo excelência e qualidade incomparáveis. 
         </p>
       </div>
       <div class="col-md-5">
@@ -217,49 +205,44 @@
           height="500" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 500x500"
           preserveAspectRatio="xMidYMid slice" focusable="false">
           <title>Placeholder</title>
-          <rect width="100%" height="100%" fill="var(--bs-secondary-bg)" /><text x="50%" y="50%"
-            fill="var(--bs-secondary-color)" dy=".3em">500x500</text>
+          <rect width="100%" height="100%" fill="var(--bs-secondary-bg)" />
+          <image href="img/featurette1.jpeg" x="10" y="10"/>
+          
         </svg>
       </div>
     </div>
-
+    <div id="quality"></div>
     <hr class="featurette-divider">
 
-    <div class="row featurette">
+    <div id="quality" class="row featurette">
       <div class="col-md-7 order-md-2">
-        <h2 class="featurette-heading fw-normal lh-1">Oh yeah, it’s that good. <span class="text-body-secondary">See for
-            yourself.</span></h2>
-        <p class="lead">Another featurette? Of course. More placeholder content here to give you an idea of how this
-          layout would work with some actual real-world content in place.</p>
+        <h2 class="featurette-heading fw-normal lh-1">Garantimos qualidade inigualável. <span class="text-body-secondary">Cliente em primeiro lugar.</span></h2>
+        <p class="lead">No nosso lava-rápido exclusivo, contamos com uma equipe de funcionários altamente dedicados, uma distinção única no mercado. Essa dedicação é comprovada e respaldada pelos profissionais especializados no setor. A garantia de qualidade é um dos nossos pilares, assegurando que a sua experiência conosco seja verdadeiramente excepcional.</p>
       </div>
       <div class="col-md-5 order-md-1">
         <svg class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" width="500"
           height="500" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 500x500"
           preserveAspectRatio="xMidYMid slice" focusable="false">
           <title>Placeholder</title>
-          <rect width="100%" height="100%" fill="var(--bs-secondary-bg)" /><text x="50%" y="50%"
-            fill="var(--bs-secondary-color)" dy=".3em">500x500</text>
+          <rect width="100%" height="100%" fill="var(--bs-secondary-bg)" /><image href="img/featurette2.jpeg" x="10" y="10"/>
         </svg>
       </div>
     </div>
 
     <hr class="featurette-divider">
 
-    <div class="row featurette">
+    <div id="price" class="row featurette">
       <div class="col-md-7">
-        <h2 class="featurette-heading fw-normal lh-1">And lastly, this one. <span
-            class="text-body-secondary">Checkmate.</span></h2>
-        <p class="lead">And yes, this is the last block of representative placeholder content. Again, not really
-          intended to be actually read, simply here to give you a better view of what this would look like with some
-          actual content. Your content.</p>
+        <h2 class="featurette-heading fw-normal lh-1">Qualidade incomparável e preços imbatíveis. <span
+            class="text-body-secondary">Suas melhores ofertas</span></h2>
+        <p class="lead">Em novo lava-rapido, você encontrará uma economia imbatível que não pesará no seu bolso. Comprometemo-nos a proporcionar qualidade excepcional a preços altamente competitivos, tornando-nos a escolha mais inteligente para você. Não deixe escapar as oportunidades incríveis que temos para oferecer!</p>
       </div>
       <div class="col-md-5">
         <svg class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" width="500"
           height="500" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 500x500"
           preserveAspectRatio="xMidYMid slice" focusable="false">
           <title>Placeholder</title>
-          <rect width="100%" height="100%" fill="var(--bs-secondary-bg)" /><text x="50%" y="50%"
-            fill="var(--bs-secondary-color)" dy=".3em">500x500</text>
+          <rect width="100%" height="100%" fill="var(--bs-secondary-bg)" /><image href="img/featurette3.png" x="10" y="10"/>
         </svg>
       </div>
     </div>
@@ -273,9 +256,9 @@
 
   <!-- FOOTER -->
   <footer class="container">
-    <p class="float-end"><a href="#">Back to top</a></p>
-    <p>&copy; 2017–2023 Company, Inc. &middot; <a href="#">Privacy</a> &middot; <a href="#">Terms</a></p>
-  </footer>
+    <p class="float-end"><a href="#">Voltar ao inicio</a></p>
+    <p>&copy; 2023 Pablo Cauê</p>
+  </footer> 
 </main>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
   integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
