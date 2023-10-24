@@ -16,7 +16,7 @@
 
 
 
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style/style.css">
 
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
     integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
@@ -118,7 +118,7 @@
           <div class="carousel-caption text-start">
             <h1>O melhor lava-rapido da região!</h1>
             <p class="opacity-75">Não perca tempo, cadastre-se agora e proporcione ao seu carro uma transformação <br> de excelência que o deixará deslumbrante. Venha descobrir a impecabilidade que merece!</p>
-            <p><a class="btn btn-lg btn-secondary" href="authentification/authentification.php">Cadastre-se hoje</a></p>
+            <p><a class="btn btn-lg btn-secondary" href="php/login.php">Cadastre-se hoje</a></p>
           </div>
         </div>
       </div>
@@ -128,7 +128,7 @@
           <div class="carousel-caption">
             <h1>Olá Pablo Cauê</h1>
             <p>Seu carro precisa de uma tratada? agende uma visita hoje mesmo!</p>
-            <p><a class="btn btn-lg btn-secondary" href="#">Agendar</a></p>
+            <p><a class="btn btn-lg btn-secondary" href="php/scheduling.php">Agendar</a></p>
           </div>
         </div>
       </div>
