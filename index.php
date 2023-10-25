@@ -1,3 +1,17 @@
+<?php
+if (!isset($_SESSION)) {
+  session_start();
+}
+
+$SERVER = "localhost";
+$USER = "root";
+$PASSWORD = "";
+$DB = "lava_rapido";
+
+$con = mysqli_connect($SERVER, $USER, $PASSWORD, $DB);
+
+?>
+
 <!doctype html>
 <html lang="en" data-bs-theme="auto">
 
@@ -116,9 +130,24 @@
         <img src="img/wallpaper5.jpg" alt="" width="100%" height="100%" style="filter: blur(2px) brightness(50%);">
         <div class="container">
           <div class="carousel-caption text-start">
-            <h1>O melhor lava-rapido da região!</h1>
-            <p class="opacity-75">Não perca tempo, cadastre-se agora e proporcione ao seu carro uma transformação <br> de excelência que o deixará deslumbrante. Venha descobrir a impecabilidade que merece!</p>
-            <p><a class="btn btn-lg btn-secondary" href="php/login.php">Cadastre-se hoje</a></p>
+            <?php
+            if (isset($_SESSION['id'])) {
+              $id = $_SESSION['id'];
+              $sql_code = "CALL spPegarNomeClientePeloId($id)";
+              $sql_query = $con->query($sql_code) or die("FALHA: " . $con->error);
+              $usuario = $sql_query->fetch_assoc();
+              echo "<h1>Olá " . $usuario['nome'] . "</h1>";
+              echo '<p class="opacity-75">Não perca tempo, cadastre-se agora e proporcione ao seu carro uma transformação <br> 
+              de excelência que o deixará deslumbrante. Venha descobrir a impecabilidade que merece!</p>';
+              echo '<p><a class="btn btn-lg btn-secondary" href="php/logout.php">Logout</a></p>';
+
+            } else {
+              echo "<h1>Faça login agora</h1>";
+              echo '<p class="opacity-75">Não perca tempo, Faça o login agora e proporcione ao seu carro uma transformação <br> 
+              de excelência que o deixará deslumbrante. Venha descobrir a impecabilidade que merece!</p>';
+              echo '<p><a class="btn btn-lg btn-secondary" href="php/login.php">Login</a></p>';
+            }
+            ?>
           </div>
         </div>
       </div>
@@ -126,7 +155,7 @@
         <img src="img/wallpaper6.jpg" alt="" width="100%" height="100%" style="filter: blur(3px) brightness(50%);">
         <div class="container">
           <div class="carousel-caption">
-            <h1>Olá Pablo Cauê</h1>
+            <h1>O melhor lava-rapido da região!</h1>
             <p>Seu carro precisa de uma tratada? agende uma visita hoje mesmo!</p>
             <p><a class="btn btn-lg btn-secondary" href="php/scheduling.php">Agendar</a></p>
           </div>
@@ -196,8 +225,11 @@
 
     <div class="row featurette">
       <div class="col-md-7">
-        <h2 class="featurette-heading fw-normal lh-1">Os melhores produtos você acha aqui. <span class="text-body-secondary">O melhor para seu carro</span></h2>
-        <p class="lead">Explore o nosso irresistível catálogo de produtos e descubra a escolha perfeita para satisfazer todas as suas necessidades. Cada item é minuciosamente selecionado por nossos especialistas, garantindo excelência e qualidade incomparáveis. 
+        <h2 class="featurette-heading fw-normal lh-1">Os melhores produtos você acha aqui. <span
+            class="text-body-secondary">O melhor para seu carro</span></h2>
+        <p class="lead">Explore o nosso irresistível catálogo de produtos e descubra a escolha perfeita para satisfazer
+          todas as suas necessidades. Cada item é minuciosamente selecionado por nossos especialistas, garantindo
+          excelência e qualidade incomparáveis.
         </p>
       </div>
       <div class="col-md-5">
@@ -206,8 +238,8 @@
           preserveAspectRatio="xMidYMid slice" focusable="false">
           <title>Placeholder</title>
           <rect width="100%" height="100%" fill="var(--bs-secondary-bg)" />
-          <image href="img/featurette1.jpeg" x="10" y="10"/>
-          
+          <image href="img/featurette1.jpeg" x="10" y="10" />
+
         </svg>
       </div>
     </div>
@@ -216,15 +248,20 @@
 
     <div id="quality" class="row featurette">
       <div class="col-md-7 order-md-2">
-        <h2 class="featurette-heading fw-normal lh-1">Garantimos qualidade inigualável. <span class="text-body-secondary">Cliente em primeiro lugar.</span></h2>
-        <p class="lead">No nosso lava-rápido exclusivo, contamos com uma equipe de funcionários altamente dedicados, uma distinção única no mercado. Essa dedicação é comprovada e respaldada pelos profissionais especializados no setor. A garantia de qualidade é um dos nossos pilares, assegurando que a sua experiência conosco seja verdadeiramente excepcional.</p>
+        <h2 class="featurette-heading fw-normal lh-1">Garantimos qualidade inigualável. <span
+            class="text-body-secondary">Cliente em primeiro lugar.</span></h2>
+        <p class="lead">No nosso lava-rápido exclusivo, contamos com uma equipe de funcionários altamente dedicados, uma
+          distinção única no mercado. Essa dedicação é comprovada e respaldada pelos profissionais especializados no
+          setor. A garantia de qualidade é um dos nossos pilares, assegurando que a sua experiência conosco seja
+          verdadeiramente excepcional.</p>
       </div>
       <div class="col-md-5 order-md-1">
         <svg class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" width="500"
           height="500" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 500x500"
           preserveAspectRatio="xMidYMid slice" focusable="false">
           <title>Placeholder</title>
-          <rect width="100%" height="100%" fill="var(--bs-secondary-bg)" /><image href="img/featurette2.jpeg" x="10" y="10"/>
+          <rect width="100%" height="100%" fill="var(--bs-secondary-bg)" />
+          <image href="img/featurette2.jpeg" x="10" y="10" />
         </svg>
       </div>
     </div>
@@ -235,14 +272,17 @@
       <div class="col-md-7">
         <h2 class="featurette-heading fw-normal lh-1">Qualidade incomparável e preços imbatíveis. <span
             class="text-body-secondary">Suas melhores ofertas</span></h2>
-        <p class="lead">Em novo lava-rapido, você encontrará uma economia imbatível que não pesará no seu bolso. Comprometemo-nos a proporcionar qualidade excepcional a preços altamente competitivos, tornando-nos a escolha mais inteligente para você. Não deixe escapar as oportunidades incríveis que temos para oferecer!</p>
+        <p class="lead">Em novo lava-rapido, você encontrará uma economia imbatível que não pesará no seu bolso.
+          Comprometemo-nos a proporcionar qualidade excepcional a preços altamente competitivos, tornando-nos a escolha
+          mais inteligente para você. Não deixe escapar as oportunidades incríveis que temos para oferecer!</p>
       </div>
       <div class="col-md-5">
         <svg class="bd-placeholder-img bd-placeholder-img-lg featurette-image img-fluid mx-auto" width="500"
           height="500" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: 500x500"
           preserveAspectRatio="xMidYMid slice" focusable="false">
           <title>Placeholder</title>
-          <rect width="100%" height="100%" fill="var(--bs-secondary-bg)" /><image href="img/featurette3.png" x="10" y="10"/>
+          <rect width="100%" height="100%" fill="var(--bs-secondary-bg)" />
+          <image href="img/featurette3.png" x="10" y="10" />
         </svg>
       </div>
     </div>
@@ -258,7 +298,7 @@
   <footer class="container">
     <p class="float-end"><a href="#">Voltar ao inicio</a></p>
     <p>&copy; 2023 Pablo Cauê</p>
-  </footer> 
+  </footer>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
   integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
@@ -266,3 +306,7 @@
 </body>
 
 </html>
+
+<?php
+
+?>

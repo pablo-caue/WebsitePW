@@ -3,9 +3,10 @@ CREATE DATABASE IF NOT EXISTS lava_rapido;
 USE lava_rapido;
 
 CREATE TABLE IF NOT EXISTS cliente (
+    id INT(4) PRIMARY KEY NOT NULL AUTO_INCREMENT,
     nome VARCHAR(16) NOT NULL,
     sobrenome VARCHAR(16) NOT NULL,
-    email VARCHAR(32) PRIMARY KEY NOT NULL,
+    email VARCHAR(32) NOT NULL,
     cpf VARCHAR(11) UNIQUE NOT NULL,
     senha VARCHAR(32) NOT NULL
 );
@@ -41,16 +42,21 @@ CREATE TABLE IF NOT EXISTS agendamento (
     codigo INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
     id_produto INT,
     cpf_funcionario VARCHAR(11) NOT NULL,
-    email_cliente VARCHAR(32) NOT NULL,
+    id_cliente INT(4) NOT NULL,
     placa_carro VARCHAR(10) NOT NULL,
     horario DATETIME NOT NULL,
     FOREIGN KEY (id_produto) REFERENCES produto(id),
     FOREIGN KEY (cpf_funcionario) REFERENCES funcionario(cpf),
-    FOREIGN KEY (email_cliente) REFERENCES cliente(email),
+    FOREIGN KEY (id_cliente) REFERENCES cliente(id),
     FOREIGN KEY (placa_carro) REFERENCES veiculo(placa)
 );
 
 DELIMITER $$
+
+CREATE PROCEDURE IF NOT EXISTS spPegarNomeClientePeloId (IN cliente_id INT(4))
+    BEGIN
+    SELECT * FROM cliente WHERE id = cliente_id;
+    END $$
 
 CREATE PROCEDURE IF NOT EXISTS spIncluiFuncionario (IN cpf VARCHAR(11), IN nome VARCHAR(32), IN horario_chegada TIME, IN horario_saida TIME)
     BEGIN
@@ -74,9 +80,9 @@ CREATE PROCEDURE IF NOT EXISTS spIncluiCliente (IN c_nome VARCHAR (16) ,IN c_sob
     INSERT INTO cliente(nome, sobrenome, email, cpf, senha) VALUES (c_nome, c_sobrenome, c_email, c_cpf, c_password);
     END $$
 
-CREATE PROCEDURE IF NOT EXISTS spPegarCliente (IN c_email VARCHAR(32), IN c_password VARCHAR(32), OUT email VARCHAR(32))
+CREATE PROCEDURE IF NOT EXISTS spPegarCliente (IN c_email VARCHAR(32), IN c_password VARCHAR(32), OUT id_cliente INT(4))
     BEGIN
-    SELECT email INTO email FROM cliente WHERE email = c_email AND senha = c_password;
+    SELECT id FROM cliente WHERE email = c_email AND senha = c_password;
     END $$
 
 
