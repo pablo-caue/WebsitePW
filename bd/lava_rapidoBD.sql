@@ -16,7 +16,8 @@ CREATE TABLE IF NOT EXISTS veiculo (
     tipo VARCHAR(16) NOT NULL,
     cor VARCHAR(16) NOT NULL,
     ano INT NOT NULL,
-    modelo VARCHAR(16) NOT NULL
+    modelo VARCHAR(16) NOT NULL,
+    marca VARCHAR(16) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS produto (

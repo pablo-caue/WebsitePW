@@ -137,15 +137,13 @@ $con = mysqli_connect($SERVER, $USER, $PASSWORD, $DB);
               $sql_query = $con->query($sql_code) or die("FALHA: " . $con->error);
               $usuario = $sql_query->fetch_assoc();
               echo "<h1>Olá " . $usuario['nome'] . "</h1>";
-              echo '<p class="opacity-75">Não perca tempo, cadastre-se agora e proporcione ao seu carro uma transformação <br> 
-              de excelência que o deixará deslumbrante. Venha descobrir a impecabilidade que merece!</p>';
+              echo '<p class="opacity-75">Pronto. Agora você já pode aproveitar o melhor de nossos serviços. <br/> Faça seu agendamento conosco agora mesmo!</p>';
               echo '<p><a class="btn btn-lg btn-secondary" href="php/logout.php">Logout</a></p>';
 
             } else {
               echo "<h1>Faça login agora</h1>";
-              echo '<p class="opacity-75">Não perca tempo, Faça o login agora e proporcione ao seu carro uma transformação <br> 
-              de excelência que o deixará deslumbrante. Venha descobrir a impecabilidade que merece!</p>';
-              echo '<p><a class="btn btn-lg btn-secondary" href="php/login.php">Login</a></p>';
+              echo '<p class="opacity-75">Ainda não é cadastrado? <br/> Faça seu cadastro agora mesmo e aproveite o melhor de nossos serviços.</p>';
+              echo '<p><a class="btn btn-lg btn-secondary" href="php/login.php">Entrar</a></p>';
             }
             ?>
           </div>
