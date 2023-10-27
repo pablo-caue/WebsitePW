@@ -45,12 +45,21 @@ CREATE TABLE IF NOT EXISTS agendamento (
     cpf_funcionario VARCHAR(11) NOT NULL,
     id_cliente INT(4) NOT NULL,
     placa_carro VARCHAR(10) NOT NULL,
-    horario DATETIME NOT NULL,
+    horario TIME NOT NULL,
     FOREIGN KEY (id_produto) REFERENCES produto(id),
     FOREIGN KEY (cpf_funcionario) REFERENCES funcionario(cpf),
     FOREIGN KEY (id_cliente) REFERENCES cliente(id),
     FOREIGN KEY (placa_carro) REFERENCES veiculo(placa)
 );
+
+CREATE VIEW vPegarFuncionario AS    
+    SELECT * FROM funcionario;
+
+CREATE VIEW vPegarTipoLavagem AS
+    SELECT * FROM lavagem;
+
+CREATE VIEW vPegarProduto AS
+    SELECT * FROM produto;
 
 DELIMITER $$
 
@@ -73,7 +82,7 @@ CREATE PROCEDURE IF NOT EXISTS spIncluiProduto (IN p_nome VARCHAR(16), IN p_marc
 CREATE PROCEDURE IF NOT EXISTS spIncluiLavagem (IN l_tipo_lavagem VARCHAR(16), IN l_valor VARCHAR(16), OUT id_lavagem INT)
     BEGIN
     INSERT INTO lavagem(tipo_lavagem, valor) VALUES (l_tipo_lavagem, l_valor);
-    SELECT id from lavagem WHERE tipo_lavagem = l_tipo_lavagem;
+    SELECT id FROM lavagem WHERE tipo_lavagem = l_tipo_lavagem;
     END $$
 
 CREATE PROCEDURE IF NOT EXISTS spIncluiCliente (IN c_nome VARCHAR (16) ,IN c_sobrenome VARCHAR (16),IN c_email VARCHAR (32), IN c_cpf VARCHAR(11), IN c_password VARCHAR(32))
@@ -86,6 +95,17 @@ CREATE PROCEDURE IF NOT EXISTS spPegarCliente (IN c_email VARCHAR(32), IN c_pass
     SELECT id FROM cliente WHERE email = c_email AND senha = c_password;
     END $$
 
+CREATE PROCEDURE IF NOT EXISTS spIncluiVeiculo (IN v_marca VARCHAR(16), IN v_modelo VARCHAR(16), IN v_cor VARCHAR(16), IN v_ano INT, IN v_tipo VARCHAR(16), IN v_placa VARCHAR(10))
+    BEGIN 
+    INSERT INTO veiculo(placa, tipo, cor, ano, modelo, marca) VALUES (v_placa, v_tipo, v_cor, v_ano, v_modelo, v_marca);
+    SELECT placa FROM veiculo WHERE placa = v_placa;
+    END $$
+
+CREATE PROCEDURE IF NOT EXISTS spIncluiAgendamento(IN a_id_produto INT, IN a_cpf_funcionario VARCHAR(11), IN a_id_cliente INT(4), IN a_placa_carro VARCHAR(10), IN a_horario TIME)
+    BEGIN
+    INSERT INTO agendamento(id_produto, cpf_funcionario, id_cliente, placa_carro, horario) VALUES (a_id_produto, a_cpf_funcionario, a_id_cliente, a_placa_carro, a_horario);
+    SELECT codigo FROM agendamento WHERE placa_carro = a_placa_carro;
+    END $$
 
 DELIMITER ;
 
@@ -96,13 +116,12 @@ CALL spIncluiFuncionario('507.662.428-03', 'Cauê Daniel Hugo Ramos', '14:00', '
 CALL spIncluiFuncionario('049.044.558-60', 'Paulo Matheus Pereira', '14:00', '22:00');
 CALL spIncluiFuncionario('498.868.578-03', 'Sueli Galvão', '14:00', '22:00');
 
-CALL spIncluiProduto('v-mol','Vonixx', @id_produto);
-CALL spIncluiProduto('lava carros','Centralsul', @id_produto);
-CALL spIncluiProduto('lava auto','Radnaq', @id_produto);
+CALL spIncluiProduto('V mol','Vonixx', @id_produto);
+CALL spIncluiProduto('Lava carros','Centralsul', @id_produto);
+CALL spIncluiProduto('Lava auto','Radnaq', @id_produto);
 
 CALL spIncluiLavagem('Lavagem Simples', '30.00', @id_lavagem);
 CALL spIncluiLavagem('Lavagem Simples + Cera','40.00', @id_lavagem);
 CALL spIncluiLavagem('Lavagem Completa','50.00', @id_lavagem);
 CALL spIncluiLavagem('Lavagem + Cera','60.00', @id_lavagem);
 CALL spIncluiLavagem('Lavagem + Polimento','75.00', @id_lavagem);
-
