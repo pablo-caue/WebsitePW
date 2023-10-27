@@ -45,11 +45,13 @@ CREATE TABLE IF NOT EXISTS agendamento (
     cpf_funcionario VARCHAR(11) NOT NULL,
     id_cliente INT(4) NOT NULL,
     placa_carro VARCHAR(10) NOT NULL,
+    id_lavagem INT NOT NULL,
     horario TIME NOT NULL,
     FOREIGN KEY (id_produto) REFERENCES produto(id),
     FOREIGN KEY (cpf_funcionario) REFERENCES funcionario(cpf),
     FOREIGN KEY (id_cliente) REFERENCES cliente(id),
-    FOREIGN KEY (placa_carro) REFERENCES veiculo(placa)
+    FOREIGN KEY (placa_carro) REFERENCES veiculo(placa),
+    FOREIGN KEY (id_lavagem) REFERENCES lavagem(id)
 );
 
 CREATE VIEW vPegarFuncionario AS    
@@ -101,20 +103,20 @@ CREATE PROCEDURE IF NOT EXISTS spIncluiVeiculo (IN v_marca VARCHAR(16), IN v_mod
     SELECT placa FROM veiculo WHERE placa = v_placa;
     END $$
 
-CREATE PROCEDURE IF NOT EXISTS spIncluiAgendamento(IN a_id_produto INT, IN a_cpf_funcionario VARCHAR(11), IN a_id_cliente INT(4), IN a_placa_carro VARCHAR(10), IN a_horario TIME)
+CREATE PROCEDURE IF NOT EXISTS spIncluiAgendamento(IN a_id_produto INT, IN a_cpf_funcionario VARCHAR(11), IN a_id_cliente INT(4), IN a_placa_carro VARCHAR(10), IN a_id_lavagem INT, IN a_horario TIME)
     BEGIN
-    INSERT INTO agendamento(id_produto, cpf_funcionario, id_cliente, placa_carro, horario) VALUES (a_id_produto, a_cpf_funcionario, a_id_cliente, a_placa_carro, a_horario);
+    INSERT INTO agendamento(id_produto, cpf_funcionario, id_cliente, placa_carro, id_lavagem, horario) VALUES (a_id_produto, a_cpf_funcionario, a_id_cliente, a_placa_carro, a_id_lavagem, a_horario);
     SELECT codigo FROM agendamento WHERE placa_carro = a_placa_carro;
     END $$
 
 DELIMITER ;
 
-CALL spIncluiFuncionario('057.467.248-66', 'Giovane Lidorio Multini', '08:00', '14:00');
-CALL spIncluiFuncionario('376. 877.158-02', 'Eduarda Castilho Martins', '08:00', '14:00');
-CALL spIncluiFuncionario('004.564.788-76', 'Felipe Miguel Aranha', '08:00', '14:00');
-CALL spIncluiFuncionario('507.662.428-03', 'Cauê Daniel Hugo Ramos', '14:00', '22:00');
-CALL spIncluiFuncionario('049.044.558-60', 'Paulo Matheus Pereira', '14:00', '22:00');
-CALL spIncluiFuncionario('498.868.578-03', 'Sueli Galvão', '14:00', '22:00');
+CALL spIncluiFuncionario('05746724866', 'Giovane Lidorio Multini', '08:00', '14:00');
+CALL spIncluiFuncionario('37687715802', 'Eduarda Castilho Martins', '08:00', '14:00');
+CALL spIncluiFuncionario('00456478876', 'Felipe Miguel Aranha', '08:00', '14:00');
+CALL spIncluiFuncionario('50766242803', 'Cauê Daniel Hugo Ramos', '14:00', '22:00');
+CALL spIncluiFuncionario('04904455860', 'Paulo Matheus Pereira', '14:00', '22:00');
+CALL spIncluiFuncionario('49886857803', 'Sueli Galvão', '14:00', '22:00');
 
 CALL spIncluiProduto('V mol','Vonixx', @id_produto);
 CALL spIncluiProduto('Lava carros','Centralsul', @id_produto);

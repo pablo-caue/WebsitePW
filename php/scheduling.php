@@ -1,10 +1,62 @@
 <?php
+if (!isset($_SESSION)) {
+    session_start();
+}
+
 $SERVER = "localhost";
 $USER = "root";
 $PASSWORD = "";
 $DB = "lava_rapido";
 
 $con = mysqli_connect($SERVER, $USER, $PASSWORD, $DB);
+
+if (
+    isset($_POST['marca']) ||
+    isset($_POST['modelo']) ||
+    isset($_POST['cor']) ||
+    isset($_POST['ano']) ||
+    isset($_POST['tipo_veiculo']) ||
+    isset($_POST['placa_carro']) ||
+    isset($_POST['funcionario']) ||
+    isset($_POST['horario']) ||
+    isset($_POST['tipo_lavagem']) ||
+    isset($_POST['produto'])
+) {
+    $marca = $con->real_escape_string($_POST['marca']);
+    $modelo = $con->real_escape_string($_POST['modelo']);
+    $cor = $con->real_escape_string($_POST['cor']);
+    $ano = $con->real_escape_string($_POST['ano']);
+    $tipo_veiculo = $con->real_escape_string($_POST['tipo_veiculo']);
+    $placa_carro = $con->real_escape_string($_POST['placa_carro']);
+
+    // Primeira consulta
+    $sql_code = "CALL spIncluiVeiculo('$marca', '$modelo', '$cor', '$ano', '$tipo_veiculo', '$placa_carro')";
+    $sql_query1 = $con->query($sql_code) or die("ERRO: " . $con->error);
+
+    $placa_carro_lista = $sql_query1->fetch_assoc();
+    $placa_carro = $placa_carro_lista['placa'];
+
+    // Feche a conexão após a primeira consulta
+    $con->close();
+
+    // Reabra a conexão para a segunda consulta
+    $con = mysqli_connect($SERVER, $USER, $PASSWORD, $DB);
+
+    $id_cliente = $_SESSION['id'];
+    $cpf_funcionario = $con->real_escape_string($_POST['funcionario']);
+    $horario = $con->real_escape_string($_POST['horario']);
+    $tipo_lavagem = $con->real_escape_string($_POST['tipo_lavagem']);
+    $idProduto = $con->real_escape_string($_POST['produto']);
+
+    // Segunda consulta
+    $sql_code = "CALL spIncluiAgendamento('$idProduto', '$cpf_funcionario', '$id_cliente', '$placa_carro', '$tipo_lavagem', '$horario')";
+    $sql_query2 = $con->query($sql_code) or die("ERRO: " . $con->error);
+
+    $con->close();
+
+    header("Location: ../index.php");
+    exit();
+}
 
 ?>
 
@@ -113,7 +165,7 @@ $con = mysqli_connect($SERVER, $USER, $PASSWORD, $DB);
 
                             <div class="col-md-8">
                                 <label for="funcionario" class="form-label">Funcionario</label>
-                                <select class="form-select" id="funcionario" required>
+                                <select class="form-select" id="funcionario" name="funcionario" required>
                                     <option value="">Escolha...</option>
                                     <?php
 
@@ -144,7 +196,7 @@ $con = mysqli_connect($SERVER, $USER, $PASSWORD, $DB);
 
                             <div class="col-md-6">
                                 <label for="country" class="form-label">Tipo de lavagem</label>
-                                <select class="form-select" id="tipo_lavagem" required>
+                                <select class="form-select" id="tipo_lavagem" name="tipo_lavagem" required>
                                     <option value="">Escolha...</option>
                                     <?php
 
@@ -211,54 +263,3 @@ $con = mysqli_connect($SERVER, $USER, $PASSWORD, $DB);
 </body>
 
 </html>
-
-<?php
-
-
-
-if (
-    isset($_POST['marca']) ||
-    isset($_POST['modelo']) ||
-    isset($_POST['cor']) ||
-    isset($_POST['ano']) ||
-    isset($_POST['tipo_veiculo']) ||
-    isset($_POST['placa_carro']) ||
-    isset($_POST['funcionario']) ||
-    isset($_POST['tipo_lavagem']) ||
-    isset($_POST['produto'])
-) {
-
-    $marca = $con->real_escape_string($_POST['marca']);
-    $modelo = $con->real_escape_string($_POST['modelo']);
-    $cor = $con->real_escape_string($_POST['cor']);
-    $ano = $con->real_escape_string($_POST['ano']);
-    $tipo_veiculo = $con->real_escape_string($_POST['tipo_veiculo']);
-    $placa_carro = $con->real_escape_string($_POST['placa_carro']);
-    $funcionario = $con->real_escape_string($_POST['funcionario']);
-    $tipo_lavagem = $con->real_escape_string($_POST['tipo_lavagem']);
-    $idProduto = $con->real_escape_string($_POST['produto']);
-
-    $sql_code = "CALL spIncluiVeiculo('$marca', '$modelo', '$cor', '$ano', '$tipo_veiculo', '$placa_carro')";
-    $sql_query = $con->query($sql_code) or die("ERRO: " . $con->error);
-
-    $placa_carro_lista = $sql_query->fetch_assoc();
-
-    $placa_carro = $placa_carro_lista['placa'];
-
-    echo 
-
-    
-
-
-    $sql_code = "CALL spIncluiAgendamento('$idProduto', '$cpffuncionario', '$idcliente', '$placa_carro', '$tipo_veiculo', '$horario')";
-
-
-
-    $con->close();
-
-
-
-}
-
-
-?>

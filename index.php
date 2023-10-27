@@ -10,6 +10,8 @@ $DB = "lava_rapido";
 
 $con = mysqli_connect($SERVER, $USER, $PASSWORD, $DB);
 
+
+
 ?>
 
 <!doctype html>
@@ -145,7 +147,6 @@ $con = mysqli_connect($SERVER, $USER, $PASSWORD, $DB);
               echo '<p class="opacity-75">Ainda não é cadastrado? <br/> Faça seu cadastro agora mesmo e aproveite o melhor de nossos serviços.</p>';
               echo '<p><a class="btn btn-lg btn-secondary" href="php/login.php">Entrar</a></p>';
             }
-            
             ?>
           </div>
         </div>
