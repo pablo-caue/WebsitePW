@@ -109,6 +109,25 @@ CREATE PROCEDURE IF NOT EXISTS spIncluiAgendamento(IN a_id_produto INT, IN a_cpf
     SELECT codigo FROM agendamento WHERE placa_carro = a_placa_carro;
     END $$
 
+CREATE PROCEDURE IF NOT EXISTS spPegarAgendamentoPeloId(IN a_id_cliente INT(4))
+    BEGIN
+    SELECT * FROM agendamento WHERE id_cliente = a_id_cliente;
+    END $$
+
+CREATE PROCEDURE IF NOT EXISTS spDeletarAgendamentoPeloId(IN a_codigo INT(4))
+    BEGIN
+    DELETE FROM agendamento WHERE codigo = a_codigo;
+    END $$
+
+CREATE PROCEDURE IF NOT EXISTS spPegarNomeFuncionarioPeloCpf(IN f_cpf VARCHAR(11))
+    BEGIN
+    SELECT nome FROM funcionario WHERE cpf = f_cpf;
+    END $$
+
+CREATE PROCEDURE spAtualizarAgendamento(IN p_codigo INT,IN p_produto INT,IN p_placa_carro VARCHAR(10),IN p_lavagem INT,IN p_horario TIME)
+    BEGIN
+    UPDATE agendamento SET id_produto = p_produto, placa_carro = p_placa_carro, id_lavagem = p_lavagem, horario = p_horario WHERE codigo = p_codigo;
+    END $$
 DELIMITER ;
 
 CALL spIncluiFuncionario('05746724866', 'Giovane Lidorio Multini', '08:00', '14:00');

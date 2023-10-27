@@ -140,15 +140,91 @@ $con = mysqli_connect($SERVER, $USER, $PASSWORD, $DB);
               $usuario = $sql_query->fetch_assoc();
               echo "<h1>Olá " . $usuario['nome'] . "</h1>";
               echo '<p class="opacity-75">Pronto. Agora você já pode aproveitar o melhor de nossos serviços. <br/> Faça seu agendamento conosco agora mesmo!</p>';
-              echo '<p><a class="btn btn-lg btn-secondary" href="php/logout.php">Logout</a></p>';
+              echo '<p><a class="btn btn-lg btn-secondary" href="php/logout.php">Logout</a>
+              <button type="button" class="btn btn-lg btn-secondary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+  Ver agendamentos
+</button>
+</p>';
+
 
             } else {
               echo "<h1>Faça login agora</h1>";
               echo '<p class="opacity-75">Ainda não é cadastrado? <br/> Faça seu cadastro agora mesmo e aproveite o melhor de nossos serviços.</p>';
               echo '<p><a class="btn btn-lg btn-secondary" href="php/login.php">Entrar</a></p>';
             }
+
+            $con->close();
             ?>
           </div>
+          <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h1 class="modal-title fs-5" id="exampleModalLabel">Seus agendamentos</h1>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <?php
+
+                  $con = mysqli_connect($SERVER, $USER, $PASSWORD, $DB);
+
+                  // Consulta SQL para obt  er os agendamentos
+                  $query = "CALL spPegarAgendamentoPeloId($id)";
+                  $result = $con->query($query);
+
+                  if ($result->num_rows > 0) {
+                    echo "<div style='overflow-x: auto;'>";
+                    echo "<table class='table'>";
+                    echo "<thead><tr>";
+                    echo "<th>Código</th>";
+                    echo "<th>ID do Produto</th>";
+                    echo "<th>CPF do Funcionário</th>";
+                    echo "<th>ID do Cliente</th>";
+                    echo "<th>Placa do Carro</th>";
+                    echo "<th>ID da Lavagem</th>";
+                    echo "<th>Horário</th>";
+                    echo "<th>Ação</th>";
+                    echo "</tr></thead>";
+                    echo "<tbody>";
+                    
+                    while ($row = $result->fetch_assoc()) {
+                      echo "<tr>";
+                      echo "<td style='white-space: nowrap;'>" . $row['codigo'] . "</td>";
+                      echo "<td style='white-space: nowrap;'>" . $row['id_produto'] . "</td>";
+                      echo "<td style='white-space: nowrap;'>" . $row['cpf_funcionario'] . "</td>";
+                      echo "<td style='white-space: nowrap;'>" . $row['id_cliente'] . "</td>";
+                      echo "<td style='white-space: nowrap;'>" . $row['placa_carro'] . "</td>";
+                      echo "<td style='white-space: nowrap;'>" . $row['id_lavagem'] . "</td>";
+                      echo "<td style='white-space: nowrap;'>" . $row['horario'] . "</td>";
+                      echo "<td style='white-space: nowrap;'>";
+                      echo "<form method='post' action='php/delete.php'>";
+                      echo "<input type='hidden' name='codigo' value='" . $row['codigo'] . "'>";
+                      echo "<input type='submit' class='btn btn-danger' value='Excluir'>";
+                      echo "</form>";
+                      echo "</td>";
+                      echo "</tr>";
+                    }
+                    
+                    echo "</tbody>";
+                    echo "</table>";
+                    echo "</div>";
+                  }
+                   else {
+                    echo "Nenhum agendamento encontrado.";
+                  }
+
+                  $con->close();
+
+                  ?>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-primary">Agendar</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
         </div>
       </div>
       <div class="carousel-item">
