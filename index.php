@@ -122,11 +122,6 @@ $con = mysqli_connect($SERVER, $USER, $PASSWORD, $DB);
 <main>
 
   <div id="myCarousel" class="carousel slide mb-6" data-bs-ride="carousel">
-    <div class="carousel-indicators">
-      <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="0" class="active" aria-current="true"
-        aria-label="Slide 1"></button>
-      <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
-    </div>
     <div class="carousel-inner">
       <div class="carousel-item active">
         <img src="img/wallpaper5.jpg" alt="" width="100%" height="100%" style="filter: blur(2px) brightness(50%);">
@@ -141,11 +136,9 @@ $con = mysqli_connect($SERVER, $USER, $PASSWORD, $DB);
               echo "<h1>Olá " . $usuario['nome'] . "</h1>";
               echo '<p class="opacity-75">Pronto. Agora você já pode aproveitar o melhor de nossos serviços. <br/> Faça seu agendamento conosco agora mesmo!</p>';
               echo '<p><a class="btn btn-lg btn-secondary" href="php/logout.php">Logout</a>
-              <button type="button" class="btn btn-lg btn-secondary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-  Ver agendamentos
-</button>
-</p>';
-
+              <button type="button" style="" class="btn btn-lg btn-secondary" data-bs-toggle="modal" data-bs-target="#verAgendamentos">Ver agendamentos</button>
+              <button type="button" class="btn btn-lg btn-secondary" style="" data-bs-toggle="modal" data-bs-target="#editarAgendamentos">Editar agendamentos</button>
+              </p>';
 
             } else {
               echo "<h1>Faça login agora</h1>";
@@ -156,7 +149,7 @@ $con = mysqli_connect($SERVER, $USER, $PASSWORD, $DB);
             $con->close();
             ?>
           </div>
-          <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+          <div class="modal fade" id="verAgendamentos" tabindex="-1" aria-labelledby="verAgendamentos"
             aria-hidden="true">
             <div class="modal-dialog">
               <div class="modal-content">
@@ -167,19 +160,20 @@ $con = mysqli_connect($SERVER, $USER, $PASSWORD, $DB);
                 <div class="modal-body">
                   <?php
 
+                  // Abra a conexão com o banco de dados
                   $con = mysqli_connect($SERVER, $USER, $PASSWORD, $DB);
 
-                  // Consulta SQL para obt  er os agendamentos
+                  // Consulta SQL para obter os agendamentos
                   $query = "CALL spPegarAgendamentoPeloId($id)";
                   $result = $con->query($query);
 
                   if ($result->num_rows > 0) {
                     echo "<div style='overflow-x: auto;'>";
-                    echo "<table class='table'>";
+                    echo "<table class='table' style='width: 1000px'>";
                     echo "<thead><tr>";
                     echo "<th>Código</th>";
-                    echo "<th>ID do Produto</th>";
-                    echo "<th>CPF do Funcionário</th>";
+                    echo "<th>Nome do Produto</th>";
+                    echo "<th>Nome do Funcionário</th>"; // Adicione esta coluna para o nome do funcionário
                     echo "<th>ID do Cliente</th>";
                     echo "<th>Placa do Carro</th>";
                     echo "<th>ID da Lavagem</th>";
@@ -187,15 +181,75 @@ $con = mysqli_connect($SERVER, $USER, $PASSWORD, $DB);
                     echo "<th>Ação</th>";
                     echo "</tr></thead>";
                     echo "<tbody>";
-                    
+
                     while ($row = $result->fetch_assoc()) {
                       echo "<tr>";
                       echo "<td style='white-space: nowrap;'>" . $row['codigo'] . "</td>";
-                      echo "<td style='white-space: nowrap;'>" . $row['id_produto'] . "</td>";
-                      echo "<td style='white-space: nowrap;'>" . $row['cpf_funcionario'] . "</td>";
+                      echo "<td style='white-space: nowrap;'>";
+
+                      // Feche a conexão temporariamente
+                      $con->close();
+
+                      // Abra uma nova conexão para buscar o nome do produto
+                      $con = mysqli_connect($SERVER, $USER, $PASSWORD, $DB);
+
+                      // Busque o nome do produto com base no ID do produto
+                      $id_produto = $row['id_produto'];
+                      $queryProduto = "CALL spPegarNomeProdutoPeloId($id_produto)";
+                      $resultProduto = $con->query($queryProduto);
+
+                      if ($resultProduto->num_rows > 0) {
+                        $rowProduto = $resultProduto->fetch_assoc();
+                        echo $rowProduto['nome'];
+                      } else {
+                        echo "Produto não encontrado";
+                      }
+
+                      echo "</td>";
+
+                      echo "<td style='white-space: nowrap;'>";
+
+                      $con->close();
+
+                      // Abra uma nova conexão para buscar o nome do funcionário
+                      $con = mysqli_connect($SERVER, $USER, $PASSWORD, $DB);
+
+                      // Busque o nome do funcionário com base no CPF do funcionário
+                      $cpf_funcionario = $row['cpf_funcionario'];
+                      $queryFuncionario = "CALL spPegarNomeFuncionarioPeloCpf('$cpf_funcionario')";
+                      $resultFuncionario = $con->query($queryFuncionario);
+
+                      if ($resultFuncionario->num_rows > 0) {
+                        $rowFuncionario = $resultFuncionario->fetch_assoc();
+                        echo $rowFuncionario['nome'];
+                      } else {
+                        echo "Funcionário não encontrado";
+                      }
+
+                      echo "</td>";
+
+                      $con->close();
+
+                      // Continue a exibição dos outros campos...
                       echo "<td style='white-space: nowrap;'>" . $row['id_cliente'] . "</td>";
                       echo "<td style='white-space: nowrap;'>" . $row['placa_carro'] . "</td>";
-                      echo "<td style='white-space: nowrap;'>" . $row['id_lavagem'] . "</td>";
+                      echo "<td style='white-space: nowrap;'>";
+
+
+                      $con = mysqli_connect($SERVER, $USER, $PASSWORD, $DB);
+                      $id_lavagem = $row['id_lavagem'];
+                      $queryLavagem = "CALL spPegarLavagemPeloId($id_lavagem)";
+                      $resultLavagem = $con->query($queryLavagem);
+
+                      if ($resultLavagem->num_rows > 0) {
+                        $rowLavagem = $resultLavagem->fetch_assoc();
+                        echo $rowLavagem['tipo_lavagem'];
+                      } else {
+                        echo "tipo lavagem não encontrado";
+                      }
+
+                      echo "</td>";
+
                       echo "<td style='white-space: nowrap;'>" . $row['horario'] . "</td>";
                       echo "<td style='white-space: nowrap;'>";
                       echo "<form method='post' action='php/delete.php'>";
@@ -205,21 +259,180 @@ $con = mysqli_connect($SERVER, $USER, $PASSWORD, $DB);
                       echo "</td>";
                       echo "</tr>";
                     }
-                    
+
                     echo "</tbody>";
                     echo "</table>";
                     echo "</div>";
-                  }
-                   else {
+                  } else {
                     echo "Nenhum agendamento encontrado.";
                   }
 
+                  // Feche a conexão após o loop
                   $con->close();
+
 
                   ?>
                 </div>
                 <div class="modal-footer">
-                  <button type="button" class="btn btn-primary">Agendar</button>
+                  <a type="button" class="btn btn-secondary" href="php/scheduling.php">Agendar</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="modal fade" id="editarAgendamentos" tabindex="-1" aria-labelledby="editarAgendamentos"
+            aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h1 class="modal-title fs-5" id="exampleModalLabel">Seus agendamentos</h1>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <?php
+
+                  // Abra a conexão com o banco de dados
+                  $con = mysqli_connect($SERVER, $USER, $PASSWORD, $DB);
+
+                  // Consulta SQL para obter os agendamentos
+                  $query = "CALL spPegarAgendamentoPeloId($id)";
+                  $result = $con->query($query);
+
+                  if ($result->num_rows > 0) {
+                    echo "<div style='overflow-x: auto;'>";
+                    echo "<table class='table' style='width: 1000px'>";
+                    echo "<thead><tr>";
+                    echo "<th>Código</th>";
+                    echo "<th>Nome do Produto</th>";
+                    echo "<th>Nome do Funcionário</th>"; // Adicione esta coluna para o nome do funcionário
+                    echo "<th>ID do Cliente</th>";
+                    echo "<th>Placa do Carro</th>";
+                    echo "<th>ID da Lavagem</th>";
+                    echo "<th>Horário</th>";
+                    echo "<th>Ação</th>";
+                    echo "</tr></thead>";
+                    echo "<tbody>";
+
+                    while ($row = $result->fetch_assoc()) {
+                      echo "<tr>";
+                      echo "<td style='white-space: nowrap;'>" . $row['codigo'] . "</td>";
+                      echo "<td style='white-space: nowrap;'>";
+
+                      // Feche a conexão temporariamente
+                      $con->close();
+
+
+
+                      // Abra uma nova conexão para buscar o nome do produto
+                      // Abra uma nova conexão para fazer o SELECT na view
+                      $conSelect = mysqli_connect($SERVER, $USER, $PASSWORD, $DB);
+
+                      // Consulta SQL para obter os dados da view
+                      $querySelect = "SELECT * FROM vPegarProduto";
+                      $resultSelect = $conSelect->query($querySelect);
+
+                      if ($resultSelect) {
+                        if ($resultSelect->num_rows > 0) {
+                          echo "<select name='produto'>";
+
+                          // Loop para criar as opções do select
+                          while ($rowSelect = $resultSelect->fetch_assoc()) {
+                            echo "<option value='" . $rowSelect['id'] . "'>" . $rowSelect['nome'] . "</option>";
+                          }
+
+                          echo "</select>";
+                        } else {
+                          echo "Nenhum produto encontrado na view.";
+                        }
+                      } else {
+                        echo "Erro ao consultar a view: " . $conSelect->error;
+                      }
+
+                      $conSelect->close(); // Feche a conexão após o SELECT
+                  
+                      echo "</td>";
+
+                      echo "<td style='white-space: nowrap;'>";
+
+
+
+                      // Abra uma nova conexão para buscar o nome do funcionário
+                      $con = mysqli_connect($SERVER, $USER, $PASSWORD, $DB);
+
+                      // Busque o nome do funcionário com base no CPF do funcionário
+                      $cpf_funcionario = $row['cpf_funcionario'];
+                      $queryFuncionario = "CALL spPegarNomeFuncionarioPeloCpf('$cpf_funcionario')";
+                      $resultFuncionario = $con->query($queryFuncionario);
+
+                      if ($resultFuncionario->num_rows > 0) {
+                        $rowFuncionario = $resultFuncionario->fetch_assoc();
+                        echo $rowFuncionario['nome'];
+                      } else {
+                        echo "Funcionário não encontrado";
+                      }
+
+                      echo "</td>";
+
+                      $con->close();
+
+                      // Continue a exibição dos outros campos...
+                      echo "<td style='white-space: nowrap;'>" . $row['id_cliente'] . "</td>";
+                      echo "<td style='white-space: nowrap;'><input type='text' name='placa_carro' value='" . $row['placa_carro'] . "'></td>";
+                      echo "<td style='white-space: nowrap;'>";
+
+                      // Abra uma nova conexão para buscar o nome da lavagem da view
+                      $con = mysqli_connect($SERVER, $USER, $PASSWORD, $DB);
+
+                      // Consulta SQL para obter o nome da lavagem da view
+                      $queryLavagem = "SELECT * FROM vPegarTipoLavagem";
+                      $resultLavagem = $con->query($queryLavagem);
+
+                      if ($resultLavagem) {
+                        if ($resultLavagem->num_rows > 0) {
+                          echo "<select name='lavagem'>";
+
+                          // Loop para criar as opções do select
+                          while ($rowLavagem = $resultLavagem->fetch_assoc()) {
+                            echo "<option value='" . $rowLavagem['id'] . "'>" . $rowLavagem['tipo_lavagem'] . "</option>";
+                          }
+
+                          echo "</select>";
+                        } else {
+                          echo "Nenhuma lavagem encontrada na view.";
+                        }
+                      } else {
+                        echo "Erro ao consultar a view: " . $con->error;
+                      }
+
+                      echo "</td>";
+
+
+                      echo "<td style='white-space: nowrap;'><input type='time' name='horario' value='" . $row['horario'] . "'></td>";
+
+                      echo "<td style='white-space: nowrap;'>";
+                      echo "<form method='post' action='php/update.php'>";
+                      echo "<input type='hidden' name='codigo' value='" . $row['codigo'] . "'>";
+                      echo "<input type='submit' class='btn btn-warning' value='Editar'>";
+                      echo "</form>";
+                      echo "</td>";
+                      echo "</tr>";
+                    }
+
+                    echo "</tbody>";
+                    echo "</table>";
+                    echo "</div>";
+                  } else {
+                    echo "Nenhum agendamento encontrado.";
+                  }
+
+                  // Feche a conexão após o loop
+                  $con->close();
+
+
+                  ?>
+                </div>
+                <div class="modal-footer">
+                  <a type="button" class="btn btn-secondary" href="php/scheduling.php">Agendar</a>
                 </div>
               </div>
             </div>
@@ -227,25 +440,8 @@ $con = mysqli_connect($SERVER, $USER, $PASSWORD, $DB);
 
         </div>
       </div>
-      <div class="carousel-item">
-        <img src="img/wallpaper6.jpg" alt="" width="100%" height="100%" style="filter: blur(3px) brightness(50%);">
-        <div class="container">
-          <div class="carousel-caption">
-            <h1>O melhor lava-rapido da região!</h1>
-            <p>Seu carro precisa de uma tratada? agende uma visita hoje mesmo!</p>
-            <p><a class="btn btn-lg btn-secondary" href="php/scheduling.php">Agendar</a></p>
-          </div>
-        </div>
-      </div>
+
     </div>
-    <button class="carousel-control-prev" type="button" data-bs-target="#myCarousel" data-bs-slide="prev">
-      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-      <span class="visually-hidden">Previous</span>
-    </button>
-    <button class="carousel-control-next" type="button" data-bs-target="#myCarousel" data-bs-slide="next">
-      <span class="carousel-control-next-icon" aria-hidden="true"></span>
-      <span class="visually-hidden">Next</span>
-    </button>
   </div>
 
 

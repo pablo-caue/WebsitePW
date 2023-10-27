@@ -29,17 +29,14 @@ if (
     $tipo_veiculo = $con->real_escape_string($_POST['tipo_veiculo']);
     $placa_carro = $con->real_escape_string($_POST['placa_carro']);
 
-    // Primeira consulta
     $sql_code = "CALL spIncluiVeiculo('$marca', '$modelo', '$cor', '$ano', '$tipo_veiculo', '$placa_carro')";
     $sql_query1 = $con->query($sql_code) or die("ERRO: " . $con->error);
 
     $placa_carro_lista = $sql_query1->fetch_assoc();
     $placa_carro = $placa_carro_lista['placa'];
 
-    // Feche a conexão após a primeira consulta
     $con->close();
 
-    // Reabra a conexão para a segunda consulta
     $con = mysqli_connect($SERVER, $USER, $PASSWORD, $DB);
 
     $id_cliente = $_SESSION['id'];
@@ -48,8 +45,8 @@ if (
     $tipo_lavagem = $con->real_escape_string($_POST['tipo_lavagem']);
     $idProduto = $con->real_escape_string($_POST['produto']);
 
-    // Segunda consulta
-    $sql_code = "CALL spIncluiAgendamento('$idProduto', '$cpf_funcionario', '$id_cliente', '$placa_carro', '$tipo_lavagem', '$horario')";
+    $sql_code = "CALL spIncluiAgendamento('$idProduto', '$cpf_funcionario', 
+    '$id_cliente', '$placa_carro', '$tipo_lavagem', '$horario')";
     $sql_query2 = $con->query($sql_code) or die("ERRO: " . $con->error);
 
     $con->close();
@@ -155,7 +152,7 @@ if (
 
 
                             <div class="col-sm-12">
-                                <label for="lastName" class="form-label">Placa do carro</label>
+                                <label for="lastName" class="form-label">Placa do veiculo</label>
                                 <input type="" class="form-control" id="placa_carro" name="placa_carro" placeholder=""
                                     value="" required>
                                 <div class="invalid-feedback">

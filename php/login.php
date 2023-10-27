@@ -1,9 +1,52 @@
 <?php 
+
 $SERVER = "localhost";
 $USER = "root";
 $PASSWORD = "";
 $DB = "lava_rapido";
 
+if (isset($_POST['email']) && isset($_POST['password'])) {
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+
+    $con = new mysqli($SERVER, $USER, $PASSWORD, $DB);
+
+    if ($con->connect_error) {
+        die("Falha na conexão: " . $con->connect_error);
+    }
+
+    $sql = "CALL spPegarCliente(?, ?, @id)";
+
+    $stmt = $con->prepare($sql);
+
+    if (!$stmt) {
+        die("Erro na preparação da consulta: " . $con->error);
+    }
+
+    $stmt->bind_param("ss", $email, $password);
+
+    $stmt->execute();
+
+    $stmt->store_result();
+
+    if ($stmt->num_rows == 1) {
+        $stmt->bind_result($id);
+        $stmt->fetch();
+
+        if (!isset($_SESSION)) {
+            session_start();
+        }
+        $_SESSION['id'] = $id;
+
+        header("Location: ../index.php");
+    } else {
+        echo "ERRO";
+    }
+
+
+    $stmt->close();
+    $con->close();
+}
 ?>
 
 <!doctype html>

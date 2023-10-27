@@ -128,6 +128,16 @@ CREATE PROCEDURE spAtualizarAgendamento(IN p_codigo INT,IN p_produto INT,IN p_pl
     BEGIN
     UPDATE agendamento SET id_produto = p_produto, placa_carro = p_placa_carro, id_lavagem = p_lavagem, horario = p_horario WHERE codigo = p_codigo;
     END $$
+
+CREATE PROCEDURE spPegarNomeProdutoPeloId(IN p_id INT)
+BEGIN
+  SELECT nome FROM produto WHERE id = p_id;
+END $$
+
+CREATE PROCEDURE spPegarLavagemPeloId(IN p_id INT)
+BEGIN
+  SELECT tipo_lavagem FROM lavagem WHERE id = p_id;
+END $$
 DELIMITER ;
 
 CALL spIncluiFuncionario('05746724866', 'Giovane Lidorio Multini', '08:00', '14:00');
