@@ -18,12 +18,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
   $sql = "CALL spDeletarAgendamentoPeloId($codigo)";
   if ($con->query($sql) === TRUE) {
     // Agendamento excluído com sucesso
-    header("Location: ../index.php");
+    echo '<script>alert("Exclusão bem-sucedida!");</script>';
+    echo '<script>window.location.href = "../index.php";</script>';
   } else {
     // Falha na execução da procedure
     echo "Erro ao excluir o agendamento: " . $con->error;
   }
-  
+
   // Fechar a conexão
   mysqli_close($con);
 }

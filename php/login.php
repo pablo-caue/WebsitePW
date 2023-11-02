@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 $SERVER = "localhost";
 $USER = "root";
@@ -38,16 +38,19 @@ if (isset($_POST['email']) && isset($_POST['password'])) {
         }
         $_SESSION['id'] = $id;
 
+        // Redirecionamento
         header("Location: ../index.php");
+        exit; // Certifique-se de encerrar o script após o redirecionamento
     } else {
-        echo "ERRO";
-    }
-
+        // Exibir uma mensagem de erro usando JavaScript
+        echo '<script>alert("Erro: Não foi possivel efetuar o login");</script>';
+}
 
     $stmt->close();
     $con->close();
 }
 ?>
+
 
 <!doctype html>
 <html lang="en" data-bs-theme="auto">
@@ -94,7 +97,7 @@ if (isset($_POST['email']) && isset($_POST['password'])) {
                 <p>Não tem login? <a href="../php/register.php">Cadastre-se</a></p>
             </div>
             <a href="op=login">
-            <button class="btn btn-primary w-100 py-2" type="submit">Fazer login</button>
+                <button class="btn btn-primary w-100 py-2" type="submit">Fazer login</button>
             </a>
             <p class="mt-5 mb-3 text-body-secondary">&copy; 2023</p>
         </form>
@@ -106,34 +109,3 @@ if (isset($_POST['email']) && isset($_POST['password'])) {
 </body>
 
 </html>
-
-<?php   
-
-$con = mysqli_connect($SERVER, $USER, $PASSWORD, $DB);
-
-if (isset($_POST['email']) || isset($_POST['password'])) {
-    $email = $con->real_escape_string($_POST['email']);
-    $password = $con->real_escape_string($_POST['password']);
-
-    $sql_code = "CALL spPegarCliente('$email', '$password', @id)";
-    $sql_query = $con->query($sql_code) or die("ERRO: " . $con->error);
-
-
-    $quantidade = $sql_query->num_rows;
-
-    if($quantidade == 1) {
-
-        $id = $sql_query->fetch_assoc();
-
-        if(!isset($_SESSION)) {
-            session_start();
-        }
-        $_SESSION['id'] = $id['id'];
-
-        header("Location: ../index.php");
-    }else{
-        echo "ERRO";
-    }
-}
-
-?>

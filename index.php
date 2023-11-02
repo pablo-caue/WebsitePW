@@ -297,6 +297,7 @@ $con = mysqli_connect($SERVER, $USER, $PASSWORD, $DB);
                   // Consulta SQL para obter os agendamentos
                   $query = "CALL spPegarAgendamentoPeloId($id)";
                   $result = $con->query($query);
+                  $con->close();
 
                   if ($result->num_rows > 0) {
                     echo "<div style='overflow-x: auto;'>";
@@ -313,44 +314,43 @@ $con = mysqli_connect($SERVER, $USER, $PASSWORD, $DB);
                     echo "</tr></thead>";
                     echo "<tbody>";
 
+
                     while ($row = $result->fetch_assoc()) {
                       echo "<tr>";
                       echo "<td style='white-space: nowrap;'>" . $row['codigo'] . "</td>";
                       echo "<td style='white-space: nowrap;'>";
 
-                      // Feche a conexão temporariamente
-                      $con->close();
+                      // Abra uma nova conexão para buscar todos os produtos
+                      $conSelectAll = mysqli_connect($SERVER, $USER, $PASSWORD, $DB);
 
+                      // Consulta SQL para obter todos os produtos
+                      $querySelectAll = "SELECT * FROM vPegarProduto";
+                      $resultSelectAll = $conSelectAll->query($querySelectAll);
 
+                      if ($resultSelectAll->num_rows > 0) {
+                        echo "<select name='novo_produto'>";
 
-                      // Abra uma nova conexão para buscar o nome do produto
-                      // Abra uma nova conexão para fazer o SELECT na view
-                      $conSelect = mysqli_connect($SERVER, $USER, $PASSWORD, $DB);
+                        while ($rowSelectAll = $resultSelectAll->fetch_assoc()) {
+                          $produtoIdAll = $rowSelectAll['id'];
+                          $produtoNomeAll = $rowSelectAll['nome'];
 
-                      // Consulta SQL para obter os dados da view
-                      $querySelect = "SELECT * FROM vPegarProduto";
-                      $resultSelect = $conSelect->query($querySelect);
-
-                      if ($resultSelect) {
-                        if ($resultSelect->num_rows > 0) {
-                          echo "<select name='produto'>";
-
-                          // Loop para criar as opções do select
-                          while ($rowSelect = $resultSelect->fetch_assoc()) {
-                            echo "<option value='" . $rowSelect['id'] . "'>" . $rowSelect['nome'] . "</option>";
+                          // Verifica se este é o produto atual do agendamento e o seleciona
+                          if ($produtoIdAll == $row['id_produto']) {
+                            echo "<option value='$produtoIdAll' selected>$produtoNomeAll</option>";
+                          } else {
+                            echo "<option value='$produtoIdAll'>$produtoNomeAll</option>";
                           }
-
-                          echo "</select>";
-                        } else {
-                          echo "Nenhum produto encontrado na view.";
                         }
+
+                        echo "</select>";
                       } else {
-                        echo "Erro ao consultar a view: " . $conSelect->error;
+                        echo "Nenhum produto encontrado na view.";
                       }
 
-                      $conSelect->close(); // Feche a conexão após o SELECT
+                      $conSelectAll->close(); // Feche a conexão após o SELECT
                   
                       echo "</td>";
+
 
                       echo "<td style='white-space: nowrap;'>";
 
@@ -380,31 +380,37 @@ $con = mysqli_connect($SERVER, $USER, $PASSWORD, $DB);
                       echo "<td style='white-space: nowrap;'><input type='text' name='placa_carro' value='" . $row['placa_carro'] . "'></td>";
                       echo "<td style='white-space: nowrap;'>";
 
-                      // Abra uma nova conexão para buscar o nome da lavagem da view
-                      $con = mysqli_connect($SERVER, $USER, $PASSWORD, $DB);
+                      // Abra uma nova conexão para buscar todas as opções de lavagem
+                      $conSelectLavagem = mysqli_connect($SERVER, $USER, $PASSWORD, $DB);
 
-                      // Consulta SQL para obter o nome da lavagem da view
-                      $queryLavagem = "SELECT * FROM vPegarTipoLavagem";
-                      $resultLavagem = $con->query($queryLavagem);
+                      // Consulta SQL para obter todas as opções de lavagem
+                      $querySelectLavagem = "SELECT * FROM vPegarTipoLavagem";
+                      $resultSelectLavagem = $conSelectLavagem->query($querySelectLavagem);
 
-                      if ($resultLavagem) {
-                        if ($resultLavagem->num_rows > 0) {
-                          echo "<select name='lavagem'>";
+                      if ($resultSelectLavagem->num_rows > 0) {
+                        echo "<select name='nova_lavagem'>";
 
-                          // Loop para criar as opções do select
-                          while ($rowLavagem = $resultLavagem->fetch_assoc()) {
-                            echo "<option value='" . $rowLavagem['id'] . "'>" . $rowLavagem['tipo_lavagem'] . "</option>";
+                        while ($rowSelectLavagem = $resultSelectLavagem->fetch_assoc()) {
+                          $lavagemId = $rowSelectLavagem['id'];
+                          $lavagemNome = $rowSelectLavagem['tipo_lavagem'];
+
+                          // Verifica se esta é a lavagem atual do agendamento e a seleciona
+                          if ($lavagemId == $row['id_lavagem']) {
+                            echo "<option value='$lavagemId' selected>$lavagemNome</option>";
+                          } else {
+                            echo "<option value='$lavagemId'>$lavagemNome</option>";
                           }
-
-                          echo "</select>";
-                        } else {
-                          echo "Nenhuma lavagem encontrada na view.";
                         }
+
+                        echo "</select>";
                       } else {
-                        echo "Erro ao consultar a view: " . $con->error;
+                        echo "Nenhuma lavagem encontrada na view.";
                       }
 
+                      $conSelectLavagem->close(); // Feche a conexão após o SELECT
+                  
                       echo "</td>";
+
 
 
                       echo "<td style='white-space: nowrap;'><input type='time' name='horario' value='" . $row['horario'] . "'></td>";
@@ -426,8 +432,7 @@ $con = mysqli_connect($SERVER, $USER, $PASSWORD, $DB);
                   }
 
                   // Feche a conexão após o loop
-                  $con->close();
-
+                  
 
                   ?>
                 </div>

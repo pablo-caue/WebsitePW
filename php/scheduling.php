@@ -51,10 +51,10 @@ if (
 
     $con->close();
 
-    header("Location: ../index.php");
+    echo '<script>alert("Agendamento feito com sucesso!");</script>';
+    echo '<script>window.location.href = "../index.php";</script>';
     exit();
 }
-
 ?>
 
 <!doctype html>
